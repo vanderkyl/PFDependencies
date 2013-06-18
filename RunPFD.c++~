@@ -1,0 +1,63 @@
+// -------------------------------
+// projects/collatz/RunCollatz.c++
+// Copyright (C) 2013
+// Glenn P. Downing
+// -------------------------------
+
+/*
+To run the program:
+    % g++ -pedantic -std=c++0x -Wall Collatz.c++ RunCollatz.c++ -o RunCollatz
+    % valgrind RunCollatz < RunCollatz.in > RunCollatz.out
+
+To configure Doxygen:
+    % doxygen -g
+That creates the file "Doxyfile".
+Make the following edits:
+    EXTRACT_ALL            = YES
+    EXTRACT_PRIVATE        = YES
+    EXTRACT_STATIC         = YES
+    GENERATE_LATEX         = NO
+
+To document the program:
+    % doxygen Doxyfile
+*/
+
+// -------
+// defines
+// -------
+
+#ifdef ONLINE_JUDGE
+    #define NDEBUG
+#endif
+
+// --------
+// includes
+// --------
+
+#include <iostream> // cin, cout, ios_base
+
+#include "Collatz.h"
+
+// ----
+// main
+// ----
+
+// Acceptance test generator
+void aux (void) {
+    int k = 0;
+    int j = 0;
+    int l = 0;
+    while (l < 1000) {
+        k = rand() % 999999 + 1;
+        j = rand() % 999999 + 1;
+        std::cout << k << " " << j << std::endl;
+        l++;
+    }
+}
+
+int main () {
+    using namespace std;
+    ios_base::sync_with_stdio(false); // turn off synchronization with C I/O
+    // aux();  // Uncomment to print out random numbers
+    collatz_solve(cin, cout);
+    return 0;}
