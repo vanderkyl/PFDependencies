@@ -8,6 +8,10 @@
 // includes
 // --------
 
+#ifdef ONLINE_JUDGE
+    #define NDEBUG
+#endif
+
 #include <cassert>  // assert
 #include <iostream> // endl, istream, ostream
 #include <set>
@@ -16,6 +20,21 @@
 //#include "PFD.h"
 
 using namespace std;
+
+int get_task_size(istream&);
+int get_rules_size(istream&);
+void solve_PFD(istream&, ostream&);
+int init_container(istream&, vector< set<int> >&);
+void process_lines(istream&, int, vector< set<int> >&);
+void process_line(istream&, vector< set<int> >&);
+void add_predecessor(set<int>&, int);
+bool eval_PFD (vector< set<int> >&, ostream&);
+void remove_predecessor (vector< set<int> >&, int);
+void print_PFD (ostream&, int);
+void PFD_solve (istream&, ostream&);
+
+
+
 
 void solve_PFD(istream& r, ostream& w)
 {
