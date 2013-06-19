@@ -8,7 +8,6 @@
 // includes
 // --------
 
-<<<<<<< HEAD
 #ifdef ONLINE_JUDGE
     #define NDEBUG
 #endif
@@ -22,6 +21,8 @@
 
 using namespace std;
 
+int get_task_size(istream&);
+int get_rules_size(istream&);
 void solve_PFD(istream&, ostream&);
 int init_container(istream&, vector< set<int> >&);
 void process_lines(istream&, int, vector< set<int> >&);
@@ -37,24 +38,23 @@ void PFD_solve (istream&, ostream&);
 
 void solve_PFD(istream& r, ostream& w)
 {
-    vector< set<int> > v;
-    int lines = init_container(r, v);
-    process_lines(r, lines, v);
+    vector< set<int> > v(get_task_size(r) + 1);
+    process_lines(r, get_rules_size(r), v);
     while (eval_PFD(v, w));
 }
 
-int init_container(istream& r, vector< set<int> >& v)
+int get_task_size(istream& r)
 {
-    if(!r)
-    {
-        return -1;
-    }
-    int n, m;
-    r >> n;
-    r >> m;
-    v.reserve(n + 1);
+    int task_size;
+    r >> task_size;
+    return task_size;
+}
 
-    return m;
+int get_rules_size(istream& r)
+{
+    int rule_size;
+    r >> rule_size;
+    return rule_size;
 }
 
 void process_lines(istream& r, int lines, vector< set<int> >& v)
@@ -100,45 +100,14 @@ bool eval_PFD (vector< set<int> >& v, ostream& w)
 }
  
 
-void remove_predecessor (vector< set<int> >& v, int i)
+void remove_predecessor (vector< set<int> >& v, int x)
 {
     for (int i = 1; i < (int)v.size(); ++i)
     {
-        v[i].erase(i);
+        v[i].erase(x);
     }
 }
-=======
-#include <cassert>  // assert
-#include <iostream> // endl, istream, ostream
-
-#include "PFD.h"
-
-
-// ------------
-// PFD_read
-// ------------
-  
-/* Reads the variable r and places the two ints given by
-   r into i and j. Return false if invalid input.     */
-int PFD_read_ (std::istream& r) {
-    int num_task;
-    r >> num_task;
-    if (!r)
-        return false;
-    r >> j;
-    assert(i > 0);
-    assert(j > 0);
-    return true;}
     
-
->>>>>>> d9b4f3d3e7990411a728d6b2cd3ef60c5396bbf4
-
-// -------------
-// PFD_print
-// -------------
-
-/* Print out the results */
-<<<<<<< HEAD
 void print_PFD (ostream& w, int i) {
     assert(i > 0);
     w << i << " ";}
@@ -149,24 +118,3 @@ int main()
 {
     solve_PFD(cin, cout);
 }
-=======
-void PFD_print (std::ostream& w, int i, int j, int v) {
-    assert(i > 0);
-    assert(j > 0);
-    assert(v > 0);
-    w << i << " " << j << " " << v << std::endl;}
-
-// -------------
-// PFD_solve
-// -------------
-
-/* Solve the problem by calling helper functions. */
-void PFD_solve (std::istream& r, std::ostream& w) {
-    int i;
-    int j;
-
-
-    while (PFD_read(r, i, j)) {
-        const int v = PFD_eval(i, j);
-        PFD_print(w, i, j, v);}}
->>>>>>> d9b4f3d3e7990411a728d6b2cd3ef60c5396bbf4
