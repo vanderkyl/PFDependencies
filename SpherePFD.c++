@@ -116,5 +116,9 @@ void print_PFD (ostream& w, int i) {
 
 int main()
 {
+    for(int i = 1; i <= 200; ++i)
+    {
     solve_PFD(cin, cout);
+    cout << endl;
+    }
 }

@@ -13,6 +13,9 @@ diff: RunPFD RunPFD.in RunPFD.out
 	diff RunPFD.out RunPFD.tmp
 	rm RunPFD.tmp
 
+test: RunPFD RunPFD.in
+	RunPFD > RunPFD.in
+
 doc: PFD.c++
 	doxygen Doxyfile
 
