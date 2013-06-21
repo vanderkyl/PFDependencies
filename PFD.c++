@@ -12,63 +12,72 @@
 #include <iostream> // endl, istream, ostream
 #include <set>
 #include <vector>
+#include <functional> //reference_wrapper
+#include <algorithm> //for_each
 
-class Vertex
-{
-    public:
-        int num;
-        int num_pre;
-        set<vertex&> succeeders;
-        Vertex()
-        {
-            num_pre = 0;
-        }
-};
-
-
-//#include "PFD.h"
+#include "PFD.h"
 
 using namespace std;
 
+class Vertex
+{
+    static int id_for_num;
+    public:
+        int num;
+        int num_pre; //number of predecessors the vertex has
+
+        set<reference_wrapper<vertex>> succeeders; //a set of vertices that this vertex points to
+
+        Vertex()
+        {
+            num = ++id_for_num;
+            num_pre = 0;
+        }
+};
+int Vertex::id_for_num = 0;
+
+//function object for the comparison in priority queue of verticses with no predecessors
+class Comp_q
+{
+public:
+    bool operator()(Vertex& v1, Vertex& v2) 
+    {
+       return v1.num > v2.num;
+    }
+};
+
 void solve_PFD(istream& r, ostream& w)
 {
-    vector<Vertex> v(get_task_size(r) + 1);
-    process_lines(r, get_rules_size(r), v);
-    while (eval_PFD(v, w));
-}
-
-int get_task_size(istream& r)
-{
-    int task_size;
+    int task_size, rules_size;
     r >> task_size;
-    return task_size;
+    r >> rules_size;
+
+    //create a vector of Verticses, each vertex represents a task
+    vector<Vertex> vertices(task_size + 1); //add 1 beacuse the index 0 is not used
+
+    read_rules(r, rules_size, v);
+
+    eval_PFD(v, w);
 }
 
-int get_rules_size(istream& r)
+void read_rules(istream& r, int rules_size, vector<Vertex>& vertices)
 {
-    int rule_size;
-    r >> rule_size;
-    return rule_size;
-}
-
-void process_lines(istream& r, int lines, vector<Vertex>& v)
-{
-    while(lines-- != 0)
+    while(rules_size-- != 0)
     {
-        process_line(r, v);
+        read_rule(r, v);
     }
 }
 
-void process_line(istream& r, vector<Vertex>& v)
+void read_rule(istream& r, vector<Vertex>& v)
 {
-    int index, num_predecessors, predecessor;
+    int index, predecessors_size, predecessor;
 
     r >> index;
-    r >> num_predecessors;
+    r >> predecessors_size;
 
-    v[index].num_pre = num_predecessors;
+    v[index].num_pre = predecessors_size;
 
-    while(num_predecessors-- != 0)
+    while(predecessors_size-- != 0)
     {
         r >> predecessor;
         v[predecessor].succeeders.insert(v[index]);
@@ -76,37 +85,46 @@ void process_line(istream& r, vector<Vertex>& v)
 }
 
 
-bool eval_PFD (vector<Vertex>& v, ostream& w)
+void eval_PFD (vector<Vertex>& v, ostream& w)
 {
-    for (int i = 1; i < (int)v.size(); ++i)
-    {
-        if(v[i].empty())
+    //priority queue for verticses with no predecessors
+    priority_queue<reference_wrapper<Vertex>, vector<reference_wrapper<Vertex>>, Comp_q_no_p> vertices_no_p();
+
+    //push the Vertices in their corresponding queues
+    for_each(v.begin(), v.end(), [&vertices_no_p](Vertex& v){
+        if(v.num_pre == 0)
         {
-            print_PFD(w, i);
-            v[i].insert(101);
-            remove_predecessor (v, i);
-            return true;
+            vertices_no_p.push(v);
         }
-    }
-    return false;
-}
- 
+    });
 
-void remove_predecessor (vector<Vertex>& v, int x)
-{
-    for (int i = 1; i < (int)v.size(); ++i)
+    int vertex, ;
+    while(!vertices_no_p.empty())
     {
-        v[i].erase(x);
+        vertex = vertices_no_p.top().get().num;
+        print_vertex(w, vertex);
+
+        vertices_no_p.pop();
+
+        //decreases the number of predecessors and push it to the queue of vertices with no predecessors if number of predecessors reach 0
+        remove_predecessors_and_transfer(vertices_no_p.top().get().succeeders, vertices_no_p);
     }
+
 }
-    
-void print_PFD (ostream& w, int i) {
-    assert(i > 0);
-    w << i << " ";}
 
-
-
-int main()
+void remove_predecessors_and_transfer (set<reference_wrapper<vertex>>& succeeders, priority_queue<reference_wrapper<Vertex>, vector<reference_wrapper<Vertex>>, Comp_q_no_p> vertices_no_p)
 {
-    solve_PFD(cin, cout);
+    //decreases the number of predecessors of all succeeders by 1 and push it to the queue of vertices with no predecessors if number of predecessors reach 0
+    for_each(succeeders.begin(), succeeders.end(), [](Vertex& v){
+        if(--v.num_pre == 0)
+        {
+            vertices_no_p.push(v);
+        }
+    });
+}
+
+void print_vertex (ostream& w, int i) 
+{
+    assert(i > 0);
+    w << i << " ";
 }
