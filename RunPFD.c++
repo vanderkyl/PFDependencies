@@ -49,10 +49,11 @@ using namespace std;
 int main () {
     
     int test_size = TEST_SIZE;
+
     while(test_size-- != 0)
     {
         solve_PFD(cin, cout);
-        cout << endl;
+        cout << endl << endl;
     }
     
     return 0;

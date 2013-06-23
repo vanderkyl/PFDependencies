@@ -14,22 +14,23 @@
 #include <iostream> // istream, ostream
 #include <vector>
 #include <queue>
-#include <functional> //reference_wrapper
 
 using namespace std;
 
+// --------
+// classes
+// --------
+
 class Vertex
 {
-    static int id_for_num;
     public:
         int num;
         int num_pre; //number of predecessors the vertex has
 
-        vector<reference_wrapper<Vertex>> succeeders; //a set of vertices that this vertex points to
+        vector<Vertex*> succeeders; //a set of vertices that this vertex points to
 
         Vertex()
         {
-            num = ++id_for_num;
             num_pre = 0;
         }
 };
@@ -38,9 +39,49 @@ class Vertex
 class Comp_q
 {
 public:
-    bool operator()(Vertex v1, Vertex v2) 
+    bool operator()(Vertex* v1, Vertex* v2) 
     {
-       return v1.num > v2.num;
+       return v1->num > v2->num;
+    }
+};
+
+//function object for getting vertex with no predecessors after the initialization
+class Transfer_vertices
+{
+public:
+    priority_queue<Vertex*, vector<Vertex*>, Comp_q>* vertices_no_p;
+
+    Transfer_vertices(priority_queue<Vertex*, vector<Vertex*>, Comp_q>* q)
+    {
+        vertices_no_p = q;
+    }
+
+    void operator()(Vertex& v) 
+    {
+       if(v.num_pre == 0)
+        {
+            vertices_no_p->push(&v);
+        }
+    }
+};
+
+//function object for removing number of predecessors
+class Remove_predecessors
+{
+public:
+    priority_queue<Vertex*, vector<Vertex*>, Comp_q>* vertices_no_p;
+
+    Remove_predecessors(priority_queue<Vertex*, vector<Vertex*>, Comp_q>* q)
+    {
+        vertices_no_p = q;
+    }
+
+    void operator()(Vertex* v) 
+    {
+        if(--(v->num_pre) == 0)
+        {
+            vertices_no_p->push(v);
+        }
     }
 };
 
@@ -78,7 +119,7 @@ void eval_PFD (vector<Vertex>&, ostream&);
 // remove_predecessors_and_transfer
 // ---------
 
-void remove_predecessors_and_transfer (vector<reference_wrapper<Vertex>>&, priority_queue<reference_wrapper<Vertex>, vector<reference_wrapper<Vertex>>, Comp_q>&);
+void remove_predecessors_and_transfer (vector<Vertex*>&, priority_queue<Vertex*, vector<Vertex*>, Comp_q>&);
 
 // ---------
 // print_vertex

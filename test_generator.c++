@@ -20,8 +20,8 @@ bool check_cyclic_condition(int, int, vector< set<int> >&);
 bool check_printed(set<int>&, int);
 
 
-#define N 100
-#define TEST_NUMBER 100
+#define N 10
+#define TEST_NUMBER 10
 
 
 int main()
@@ -39,7 +39,6 @@ void generate_tests(int tests_num)
 
 void generate_test()
 {
-	srand(time(NULL));
 	int n = rand() % N + 1;
 	int m = get_m(n);
 

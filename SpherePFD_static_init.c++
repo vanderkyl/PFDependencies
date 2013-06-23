@@ -33,6 +33,7 @@ using namespace std;
 class Vertex
 {
     public:
+        static int id_for_num;
         int num;
         int num_pre; //number of predecessors the vertex has
 
@@ -40,9 +41,11 @@ class Vertex
 
         Vertex()
         {
+            num = ++id_for_num;
             num_pre = 0;
         }
 };
+int Vertex::id_for_num = 0;
 
 //function object for the comparison in priority queue of verticses with no predecessors
 class Comp_q
@@ -109,16 +112,13 @@ void print_vertex (ostream&, int) ;
 
 void solve_PFD(istream& r, ostream& w)
 {
+    Vertex::id_for_num = 0;
     int task_size, rules_size;
     r >> task_size;
     r >> rules_size;
 
     //create a vector of Verticses, each vertex represents a task
     vector<Vertex> vertices(task_size);
-    for(int i = 1; i <= vertices.size(); ++i)
-    {
-        vertices[i - 1].num = i;
-    }
 
     read_rules(r, rules_size, vertices);
 
