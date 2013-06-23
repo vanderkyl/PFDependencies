@@ -12,10 +12,38 @@
 // --------
 
 #include <iostream> // istream, ostream
-#include <set>
 #include <vector>
+#include <queue>
+#include <functional> //reference_wrapper
 
 using namespace std;
+
+class Vertex
+{
+    static int id_for_num;
+    public:
+        int num;
+        int num_pre; //number of predecessors the vertex has
+
+        vector<reference_wrapper<Vertex>> succeeders; //a set of vertices that this vertex points to
+
+        Vertex()
+        {
+            num = ++id_for_num;
+            num_pre = 0;
+        }
+};
+
+//function object for the comparison in priority queue of verticses with no predecessors
+class Comp_q
+{
+public:
+    bool operator()(Vertex v1, Vertex v2) 
+    {
+       return v1.num > v2.num;
+    }
+};
+
 // ---------
 // solve_PFD
 // ---------
@@ -26,54 +54,36 @@ void solve_PFD (std::istream&, std::ostream&);
 // init_container
 // ---------
 
-int init_container (std::istream&, vector< set<int> >&);
-
-// ---------
-// get_task
-// ---------
-
-int get_task_size (std::istream&);
-
-// ---------
-// get_rules_size
-// ---------
-
 int get_rules_size (std::istream&);
 
 // ---------
-// process_lines
+// read_rules
 // ---------
 
-void process_lines (std::istream&, int, vector< set<int> >&);
+void read_rules(istream&, int, vector<Vertex>&);
 
 // ---------
-// process_line
+// read_rule
 // ---------
 
-void process_line (std::istream&, vector< set<int> >&);
-
-// ---------
-// add_pred
-// ---------
-
-void add_pred (set<int>&, int);
+void read_rule(istream&, vector<Vertex>&);
 
 // ---------
 // eval_PFD
 // ---------
 
-bool eval_PFD (vector< set<int> >&, std::ostream&);
+void eval_PFD (vector<Vertex>&, ostream&);
 
 // ---------
-// remove_pred
+// remove_predecessors_and_transfer
 // ---------
 
-void remove_pred (vector< set<int> >&, int);
+void remove_predecessors_and_transfer (vector<reference_wrapper<Vertex>>&, priority_queue<reference_wrapper<Vertex>, vector<reference_wrapper<Vertex>>, Comp_q>&);
 
 // ---------
-// print_PFD
+// print_vertex
 // ---------
 
-void print_PFD (std::ostream&, int);
+void print_vertex (ostream&, int) ;
 
 #endif // PFD_h

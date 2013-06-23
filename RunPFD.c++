@@ -30,6 +30,8 @@ To document the program:
     #define NDEBUG
 #endif
 
+#define TEST_SIZE 1
+
 // --------
 // includes
 // --------
@@ -45,9 +47,13 @@ using namespace std;
 // ----
 
 int main () {
-
-    using namespace std;
-    ios_base::sync_with_stdio(false); // turn off synchronization with C I/O
     
-    solve_PFD(cin, cout);
-    return 0;}
+    int test_size = TEST_SIZE;
+    while(test_size-- != 0)
+    {
+        solve_PFD(cin, cout);
+        cout << endl;
+    }
+    
+    return 0;
+}
