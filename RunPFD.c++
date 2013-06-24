@@ -29,7 +29,7 @@ To document the program:
     #define NDEBUG
 #endif
 
-#define TEST_SIZE 100
+#define TEST_SIZE 1
 
 // --------
 // includes

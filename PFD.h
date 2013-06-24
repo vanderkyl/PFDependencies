@@ -1,8 +1,7 @@
-// --------------------------
-// projects/collatz/Collatz.h
+// ----------------------------
 // Copyright (C) 2013
-// Glenn P. Downing
-// --------------------------
+// Ka Seng Chou, Kyle VanderHoof
+// ----------------------------
 
 #ifndef PFD_h
 #define PFD_h
@@ -116,15 +115,15 @@ void read_rule(istream&, vector<Vertex>&);
 void eval_PFD (vector<Vertex>&, ostream&);
 
 // ---------
-// remove_predecessors_and_transfer
-// ---------
-
-void remove_predecessors_and_transfer (vector<Vertex*>&, priority_queue<Vertex*, vector<Vertex*>, Comp_q>&);
-
-// ---------
 // print_vertex
 // ---------
 
 void print_vertex (ostream&, int) ;
+
+// ---------
+// solved
+// ---------
+
+bool solved(vector<Vertex>&);
 
 #endif // PFD_h
