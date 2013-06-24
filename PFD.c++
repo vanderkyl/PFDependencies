@@ -29,7 +29,7 @@ void solve_PFD(istream& r, ostream& w)
 
     assert(task_size > 0);
     assert(task_size <= 100);
-    assert(rules_size > 0);
+    assert(rules_size >= 0);
     assert(rules_size < task_size);
 
     //create a vector of Verticses, each vertex represents a task
@@ -48,7 +48,7 @@ void solve_PFD(istream& r, ostream& w)
 void read_rules(istream& r, int rules_size, vector<Vertex>& vertices)
 {
     assert(r != NULL);
-    assert(rules_size > 0);
+    assert(rules_size >= 0);
     assert(rules_size < 100);
     assert(!vertices.empty());
     assert(vertices.size() <= 100);
