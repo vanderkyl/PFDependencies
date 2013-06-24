@@ -1,3 +1,8 @@
+// ----------------------------
+// Copyright (C) 2013
+// Ka Seng Chou, Kyle VanderHoof
+// ----------------------------
+
 #include <iostream> // cin, cout, ios_base
 #include <set>
 #include <vector>
@@ -11,21 +16,22 @@ void generate_tests(int);
 void generate_test();
 int get_n();
 int get_m(int);
-int get_new_head_vertex(vector<int>&, int);
-int get_preceder_size(vector< set<int> >&, int, int);
-int get_preceder(int, set<int>&, vector< set<int> >&, int);
-void generate_preceders(int, vector< set<int> >&, int, int);
-bool check_valid_preceder(int, int, set<int>&, vector< set<int> >&);
-bool check_cyclic_condition(int, int, vector< set<int> >&);
+void initialize_removable(set<int>&, int, int);
+int get_target(set<int>&, int);
+int get_preceder_size(int);
+int get_preceder(int, set<int>&, set<int>&, int);
+void generate_preceders(int, set<int>&, int, int);
+bool check_valid_preceder(int, int, set<int>&, set<int>&);
 bool check_printed(set<int>&, int);
 
 
-#define N 10
-#define TEST_NUMBER 10
+#define N 100
+#define TEST_NUMBER 100
 
 
 int main()
 {
+  srand(time(NULL));
 	generate_tests(TEST_NUMBER);
 }
 
@@ -42,31 +48,27 @@ void generate_test()
 	int n = rand() % N + 1;
 	int m = get_m(n);
 
-     int vertics_being_pointed;
-     int preceder_size;
-     vector< set<int> > suc_record(n + 1);
-     vector<int> vertics_printed_as_head(n + 1, 0);
-     cout << n << " " << m << endl;
+   int target;
+   int preceder_size;
+   set<int> removable;
+   cout << n << " " << m << endl;
 
-     while (m-- != 0)
-     {
-        vertics_being_pointed = get_new_head_vertex(vertics_printed_as_head, n);
+   initialize_removable(removable, n - m, n);
+   while(removable.size() != n)
+   {
+      target = get_target(removable, n);
 
-        vertics_printed_as_head[vertics_being_pointed] = 1;
+      cout << target << " ";
 
-        cout << vertics_being_pointed << " ";
+      preceder_size = get_preceder_size(removable.size());
 
-        preceder_size = get_preceder_size(suc_record, n, vertics_being_pointed);
+      cout << preceder_size << " ";
 
-        cout << preceder_size << " ";
-
-        generate_preceders(vertics_being_pointed, suc_record, n, preceder_size);
-
-        cout << endl;
-     }
-     cout << endl;
-     suc_record.clear();
-     vertics_printed_as_head.clear();
+      generate_preceders(target, removable, n, preceder_size);
+      removable.insert(target);
+      cout << endl;
+   }
+   cout << endl;
 }
 
 int get_n()
@@ -84,61 +86,65 @@ int get_m(int n)
 	return m;
 }
 
-int get_new_head_vertex(vector<int>& record, int n)
-{	
-	int vertex;
-	do
-    {
-  		vertex = rand() % n + 1;
-    }while(record[vertex] == 1);
-    return vertex;
-}
-
-int get_preceder_size(vector< set<int> >& record, int n, int vertex_point_to)
+void initialize_removable(set<int>& removable, int size, int n)
 {
-	int size;
-	do
+  set<int> added;
+  int target;
+  while(size-- != 0)
+  {
+    do
     {
-  		size = rand() % (n - record[vertex_point_to].size());
-    }while(size == 0);
-    return size;
+      target = rand() % n + 1;
+    }while(added.find(target) != added.end());
+    added.insert(target);
+    removable.insert(target);
+  }
 }
 
-void generate_preceders(int succeeder, vector< set<int> >& record, int n, int size)
+int get_target(set<int>& record, int n)
+{	
+	int target;
+	do
+  {
+		target = rand() % n + 1;
+  }while(record.find(target) != record.end());
+  return target;
+}
+
+int get_preceder_size(int max)
+{
+  return rand() % max + 1;
+}
+
+void generate_preceders(int succeeder, set<int>& record, int n, int size)
 {
 	set<int> check_duplicate_set;
 
 	int preceder;
 
-	 while(--size >= 0)
+	 while(size-- != 0)
     {
       preceder = get_preceder(succeeder, check_duplicate_set, record, n);
 
       cout << preceder << " ";
 
-      record[preceder].insert(succeeder);
       check_duplicate_set.insert(preceder);
     }
 }
 
-int get_preceder(int succeeder, set<int>& check_duplicate_set, vector< set<int> >& record, int n)
+int get_preceder(int succeeder, set<int>& check_duplicate_set, set<int>& record, int n)
 {	
 	int preceder;
 	do
-      {
-        preceder = rand() % n + 1;
-      }while(!check_valid_preceder(preceder, succeeder, check_duplicate_set, record));
+    {
+      preceder = rand() % n + 1;
+    }while(!check_valid_preceder(preceder, succeeder, check_duplicate_set, record));
     return preceder;
 }
 
-bool check_valid_preceder(int preceder, int succeeder, set<int>& check_duplicate_set, vector< set<int> >& record)
+bool check_valid_preceder(int preceder, int succeeder, set<int>& check_duplicate_set, set<int>& record)
 {
-	return check_cyclic_condition(succeeder, preceder, record) &&  check_printed(check_duplicate_set, preceder) && (preceder != succeeder);
-}
-
-bool check_cyclic_condition(int vertex1, int vertex2, vector< set<int> >& record)
-{
-	return record[vertex1].find(vertex2) == record[vertex1].end();
+	return (record.find(preceder) != record.end()) &&  check_printed(check_duplicate_set, preceder) && (preceder != succeeder);
 }
 
 bool check_printed(set<int>& record, int vertex)

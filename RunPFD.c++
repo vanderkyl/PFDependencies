@@ -1,13 +1,12 @@
-// -------------------------------
-// projects/collatz/RunCollatz.c++
+// ----------------------------
 // Copyright (C) 2013
-// Glenn P. Downing
-// -------------------------------
+// Ka Seng Chou, Kyle VanderHoof
+// ----------------------------
 
 /*
 To run the program:
-    % g++ -pedantic -std=c++0x -Wall Collatz.c++ RunCollatz.c++ -o RunCollatz
-    % valgrind RunCollatz < RunCollatz.in > RunCollatz.out
+    % g++ -pedantic -std=c++0x -Wall PFD.c++ RunPFD.c++ -o RunPFD
+    % valgrind RunPFD < RunPFD.in > RunPFD.out
 
 To configure Doxygen:
     % doxygen -g
@@ -30,7 +29,7 @@ To document the program:
     #define NDEBUG
 #endif
 
-#define TEST_SIZE 1
+#define TEST_SIZE 100
 
 // --------
 // includes

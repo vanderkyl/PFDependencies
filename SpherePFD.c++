@@ -1,7 +1,6 @@
 // ----------------------------
-// projects/PFD/PFD.c++
 // Copyright (C) 2013
-// Glenn P. Downing
+// Ka Seng Chou, Kyle VanderHoof
 // ----------------------------
 
 // --------
