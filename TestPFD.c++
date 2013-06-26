@@ -33,6 +33,27 @@ To test the program:
 
 #include "PFD.h"
 
+class Match_vertex
+{
+public:
+	int value;
+	Match_vertex(int x)
+	{
+		value = x;
+	}
+	bool operator()(Vertex *v)
+	{
+		if(v->num == value)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+};
+		
 // -----------
 // TestPFD
 // -----------
@@ -113,16 +134,16 @@ struct TestPFD : CppUnit::TestFixture {
         CPPUNIT_ASSERT(v[2].num_pre == 2);
         CPPUNIT_ASSERT(v[3].num_pre == 1);
         CPPUNIT_ASSERT(v[4].num_pre == 1);
-        /*
-        CPPUNIT_ASSERT(find(v[0].succeeders.begin(), v[0].succeeders.end(), 5) != v	[0].succeeders.end()); 
-        CPPUNIT_ASSERT(find(v[0].succeeders.begin(), v[0].succeeders.end(), 3) != v	[0].succeeders.end()); 
+        
+        CPPUNIT_ASSERT(find_if(v[0].succeeders.begin(), v[0].succeeders.end(), Match_vertex(5)) != v	[0].succeeders.end()); 
+        CPPUNIT_ASSERT(find_if(v[0].succeeders.begin(), v[0].succeeders.end(), Match_vertex(3)) != v	[0].succeeders.end()); 
         CPPUNIT_ASSERT(v[1].succeeders.empty()); 
-        CPPUNIT_ASSERT(find(v[2].succeeders.begin(), v[2].succeeders.end(), 2) != v	[2].succeeders.end()); 
-        CPPUNIT_ASSERT(find(v[2].succeeders.begin(), v[2].succeeders.end(), 4) != v	[2].succeeders.end()); 
+        CPPUNIT_ASSERT(find_if(v[2].succeeders.begin(), v[2].succeeders.end(), Match_vertex(2)) != v	[2].succeeders.end()); 
+        CPPUNIT_ASSERT(find_if(v[2].succeeders.begin(), v[2].succeeders.end(), Match_vertex(4)) != v	[2].succeeders.end()); 
         CPPUNIT_ASSERT(v[3].succeeders.empty());
-        CPPUNIT_ASSERT(find(v[4].succeeders.begin(), v[4].succeeders.end(), 3) != v	[4].succeeders.end());
-        CPPUNIT_ASSERT(find(v[4].succeeders.begin(), v[4].succeeders.end(), 2) != v	[4].succeeders.end());
-        */
+        CPPUNIT_ASSERT(find_if(v[4].succeeders.begin(), v[4].succeeders.end(), Match_vertex(3)) != v	[4].succeeders.end());
+        CPPUNIT_ASSERT(find_if(v[4].succeeders.begin(), v[4].succeeders.end(), Match_vertex(2)) != v	[4].succeeders.end());
+        
     }
 
     // ---------
@@ -139,7 +160,7 @@ struct TestPFD : CppUnit::TestFixture {
         } 
         read_rule(r, v);
         CPPUNIT_ASSERT(v[3].num_pre == 1);
-        //CPPUNIT_ASSERT(find(v[2].succeeders.begin(), v[2].succeeders.end(), 4) != v	[2].succeeders.end()); 
+        CPPUNIT_ASSERT(find_if(v[2].succeeders.begin(), v[2].succeeders.end(), Match_vertex(4)) != v	[2].succeeders.end()); 
     }
   
     void test_read_rule_2 () 
@@ -152,13 +173,13 @@ struct TestPFD : CppUnit::TestFixture {
         } 
         read_rule(r, v);
         CPPUNIT_ASSERT(v[17].num_pre == 5);
-        /*
-        CPPUNIT_ASSERT(find(v[7].succeeders.begin(), v[7].succeeders.end(), 18) != v	[7].succeeders.end()); 
-	CPPUNIT_ASSERT(find(v[5].succeeders.begin(), v[5].succeeders.end(), 18) != v	[5].succeeders.end()); 
-	CPPUNIT_ASSERT(find(v[3].succeeders.begin(), v[3].succeeders.end(), 18) != v	[3].succeeders.end()); 
-	CPPUNIT_ASSERT(find(v[0].succeeders.begin(), v[0].succeeders.end(), 18) != v	[0].succeeders.end()); 
-	CPPUNIT_ASSERT(find(v[16].succeeders.begin(), v[16].succeeders.end(), 18) != v	[16].succeeders.end()); 
-        */
+        
+        CPPUNIT_ASSERT(find_if(v[7].succeeders.begin(), v[7].succeeders.end(), Match_vertex(18)) != v	[7].succeeders.end()); 
+	CPPUNIT_ASSERT(find_if(v[5].succeeders.begin(), v[5].succeeders.end(), Match_vertex(18)) != v	[5].succeeders.end()); 
+	CPPUNIT_ASSERT(find_if(v[3].succeeders.begin(), v[3].succeeders.end(), Match_vertex(18)) != v	[3].succeeders.end()); 
+	CPPUNIT_ASSERT(find_if(v[0].succeeders.begin(), v[0].succeeders.end(), Match_vertex(18)) != v	[0].succeeders.end()); 
+	CPPUNIT_ASSERT(find_if(v[16].succeeders.begin(), v[16].succeeders.end(), Match_vertex(18)) != v	[16].succeeders.end()); 
+        
     }
 
     void test_read_rule_3 () 
